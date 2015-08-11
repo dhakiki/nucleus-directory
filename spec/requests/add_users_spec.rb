@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe "AddUsers", type: :request do
+describe "AddUsers", type: :request, js:true do
   it "adds a basic user" do
     visit root_path
     click_link "New User"
@@ -8,6 +8,27 @@ describe "AddUsers", type: :request do
     fill_in "Last name", with: 'Hakimi'
     click_button "Create User"
     expect(page).to have_content("User was successfully created.")
+  end
+
+  it "edits a basic user" do
+    visit root_path
+    expect(page).to have_text("Will")
+    first(:link, 'Edit').click
+    fill_in "First name", with: 'Jaden'
+    click_button 'Update User'
+    expect(page).to have_content("User was successfully updated.")
+    click_link 'Back'
+    expect(page).to have_text("Jaden")
+    expect(page).to_not have_text("Will")
+  end
+
+  it "deletes a basic user" do
+    visit root_path
+    expect(page).to have_text("Jaden")
+    page.accept_alert do
+      first(:link, 'Destroy').click
+    end
+    expect(page).to_not have_content("Jaden")
   end
 
   it "errors when try to add a user with no first name" do
