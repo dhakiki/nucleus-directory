@@ -6,6 +6,9 @@ p
 p
   strong Last name:
   = @user.last_name
+p
+  strong Email:
+  = @user.email
 
 = link_to 'Edit', edit_user_path(@user)
 '|
