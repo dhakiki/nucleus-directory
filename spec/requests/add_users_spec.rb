@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe "AddUsers", type: :request, js:true do
-  it "adds a basic user", js:true do
+  it "adds a basic user" do
     visit root_path
     click_link "New User"
     fill_in "First name", with: 'Doreen'
@@ -12,7 +12,7 @@ describe "AddUsers", type: :request, js:true do
     expect(page).to have_content("User was successfully created.")
   end
 
-  it "edits a basic user", js:true do
+  it "edits a basic user" do
     visit root_path
     expect(page).to have_text("Will")
     first(:link, 'Edit').click
@@ -27,7 +27,7 @@ describe "AddUsers", type: :request, js:true do
     expect(page).to_not have_text("Will")
   end
 
-  it "deletes a basic user", js:true do
+  it "deletes a basic user" do
     visit root_path
     expect(page).to have_text("Jaden")
     page.accept_alert do
@@ -43,5 +43,21 @@ describe "AddUsers", type: :request, js:true do
     expect(page).to have_css(".user_first_name.field_with_errors")
     expect(page).to have_css(".user_last_name.field_with_errors")
     expect(page).to have_css(".user_email.field_with_errors")
+  end
+  
+  it "doesnt fill an email when only enter first name" do
+    visit root_path
+    click_link "New User"
+    fill_in "First name", with: 'Doreen'
+    page.execute_script("$('#user_first_name').trigger('change')")
+    expect(find_field('Email').value).to eq ''
+  end
+  
+  it "doesnt fill an email when only enter last name" do
+    visit root_path
+    click_link "New User"
+    fill_in "Last name", with: 'Hakimi'
+    page.execute_script("$('#user_last_name').trigger('change')")
+    expect(find_field('Email').value).to eq ''
   end
 end
