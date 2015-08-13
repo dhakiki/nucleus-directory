@@ -13,16 +13,5 @@
     = f.button :submit
 
 coffee:
-  $('input[name="user[first_name]"]').on 'change', ->
-    if $('#user_first_name').prop('value') != "" && $('#user_last_name').prop('value') != "" 
-      first_name = $('#user_first_name').prop('value')
-      last_name = $('#user_last_name').prop('value')
-      email = "#{first_name}.#{last_name}@originate.com".replace(/ /g, '').toLowerCase()
-      $('#user_email').prop 'value', email
-
-  $('input[name="user[last_name]"]').on 'change', ->
-    if $('#user_first_name').prop('value') != "" && $('#user_last_name').prop('value') != "" 
-      first_name = $('#user_first_name').prop('value')
-      last_name = $('#user_last_name').prop('value')
-      email = "#{first_name}.#{last_name}@originate.com".replace(/ /g, '').toLowerCase()
-      $('#user_email').prop 'value', email
+  UserForm = require 'user'
+  new UserForm('.form-inputs')
