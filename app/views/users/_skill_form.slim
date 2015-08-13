@@ -1,0 +1,9 @@
+.skill
+  .field
+    = fs.label :name, "Skill"
+    = fs.text_field :name
+  .field
+    = fs.label :level, "Level"
+    = fs.select :level, options_for_select(@skill_levels, fs.object.level)
+  .field
+    = fs.link_to_remove "Remove"

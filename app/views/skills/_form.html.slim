@@ -1,0 +1,10 @@
+= simple_form_for(@skill) do |f|
+  = f.error_notification
+
+  .form-inputs
+    = f.input :name
+    = f.input :level
+    = f.input :user_id
+
+  .form-actions
+    = f.button :submit

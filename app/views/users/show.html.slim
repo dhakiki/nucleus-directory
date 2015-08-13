@@ -9,6 +9,15 @@ p
 p
   strong Email:
   = @user.email
+p
+  b Skills:
+  ul
+    - for skill in @user.skills
+      li
+        b Name:
+        = skill.name
+        b Level:
+        = skill.level
 
 = link_to 'Edit', edit_user_path(@user)
 '|
