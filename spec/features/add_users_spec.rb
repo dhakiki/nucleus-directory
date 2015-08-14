@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 describe "AddUsers", type: :request, js:true do
+  let (:user) { create :user }
   it "adds a basic user" do
     visit root_path
     click_link "New User"
@@ -29,11 +30,10 @@ describe "AddUsers", type: :request, js:true do
 
   it "deletes a basic user" do
     visit root_path
-    expect(page).to have_text("Jaden")
     page.accept_alert do
       first(:link, 'Destroy').click
     end
-    expect(page).to_not have_content("Jaden")
+    expect(page).to_not have_content("Will")
   end
 
   it "errors when try to add a user with no first name", js:true do

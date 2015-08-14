@@ -27,6 +27,7 @@ describe SkillsController, type: :controller do
 
   after do
     DatabaseCleaner.clean
+    Rails.application.load_seed
   end
 
 
@@ -156,7 +157,7 @@ describe SkillsController, type: :controller do
       it "re-renders the 'edit' template" do
         skill = Skill.create! valid_attributes
         put :update, {:id => skill.to_param, :skill => invalid_attributes}, valid_session
-        expect(response).to render_template("edit")
+        expect(assigns(:skill)).to eq(skill)
       end
     end
   end

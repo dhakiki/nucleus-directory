@@ -7,6 +7,7 @@ require 'spec_helper'
 require 'rspec/rails'
 require 'selenium-webdriver'
 require 'capybara/rspec'
+require 'factory_girl_rails'
 
 # Add additional requires below this line. Rails is not loaded until this point!
 
@@ -44,7 +45,7 @@ RSpec.configure do |config|
   # examples within a transaction, remove the following line or assign false
   # instead of true.
   config.use_transactional_fixtures = true
-
+  config.include FactoryGirl::Syntax::Methods
   config.before(:each, selenium: true) do
     Capybara.current_driver = :selenium
   end
@@ -71,6 +72,6 @@ RSpec.configure do |config|
   config.include Capybara::DSL
   config.before(:suite) do
     DatabaseCleaner.clean
-    Rails.application.load_seed
+  #  Rails.application.load_seed
   end
 end

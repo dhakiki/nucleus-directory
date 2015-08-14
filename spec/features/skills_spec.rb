@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 describe "Skills", js:true, type: :request do
+  let (:user) { create :user }
+  let (:skill) { create :skill }
   it "adds a skill to a new user" do
     visit root_path
     click_link "New User"
