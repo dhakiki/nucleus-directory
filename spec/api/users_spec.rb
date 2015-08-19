@@ -1,6 +1,9 @@
 require 'rails_helper'
 
 describe 'Users API', type: :request do
+  before do
+    DatabaseCleaner.clean
+  end
   let(:valid_attributes) {
     {
       first_name: 'Keanu',

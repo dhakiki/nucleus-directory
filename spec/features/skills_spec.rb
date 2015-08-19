@@ -18,7 +18,7 @@ describe "Skills", js:true, type: :request do
 
   it 'edits a skill on an existing user' do
     visit root_path
-    expect(page).to have_text("Keanu")
+    expect(page).to have_text("Will")
     first(:link, 'Show').click
     expect(page).to have_content("Name:ActingLevel:1")
     click_link "Edit"
@@ -30,7 +30,7 @@ describe "Skills", js:true, type: :request do
 
   it 'removes a skill on an existing user' do
     visit root_path
-    expect(page).to have_text("Keanu")
+    expect(page).to have_text("Will")
     first(:link, 'Show').click
     expect(page).to have_content("Name:ActingLevel:5")
     click_link "Edit"
