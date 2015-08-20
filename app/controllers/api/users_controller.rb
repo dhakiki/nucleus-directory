@@ -11,7 +11,7 @@ module Api
     def show
       user = User.find(params[:id])
       user = user.to_json if user
-      user_skills = Skill.where user_id = params[:id]
+      user_skills = Skill.where user_id: params[:id]
       #trying to embed attribute into user (probably a better way to do this than re-parsing)
       if user_skills
         user = JSON.parse user
@@ -24,14 +24,26 @@ module Api
       @user = User.new(user_params)
 
       if @user.save
-        puts 'save success'
         respond_with @user, status: :ok
       else
-        puts 'save fail'
         render json: {error: @user.errors.messages, status: :unprocessable_entity}
       end
     end
 
+    def update
+      @user = User.find(params[:id])
+      if @user.update(user_params)
+        render json: {user: @user, status: :ok}
+      else
+        render json: { error: @user.errors.messages, status: :unprocessable_entity }
+      end
+    end
+
+    def destroy
+      @user = User.find(params[:id])
+      @user.destroy
+      render json: { status: :ok }
+    end
 
     private
 

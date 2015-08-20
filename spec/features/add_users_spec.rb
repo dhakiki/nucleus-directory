@@ -1,7 +1,6 @@
 require 'rails_helper'
 
 describe "AddUsers", type: :request, js:true do
-  let (:user) { create :user }
   it "adds a basic user" do
     visit root_path
     click_link "New User"
@@ -15,25 +14,29 @@ describe "AddUsers", type: :request, js:true do
 
   it "edits a basic user" do
     visit root_path
-    expect(page).to have_text("Will")
-    first(:link, 'Edit').click
-    expect(find_field('Email').value).to eq 'will.smith@originate.com'
-    fill_in "First name", with: 'Jaden'
+    expect(page).to have_text("Donald")
+    within('tr[data-uuid="donald.trump@originate.com"]') do
+      click_on('Edit')
+    end
+    expect(find_field('Email').value).to eq 'donald.trump@originate.com'
+    fill_in "First name", with: 'President'
     page.execute_script("$('#user_first_name').trigger('change')")
-    expect(find_field('Email').value).to eq 'jaden.smith@originate.com'
+    expect(find_field('Email').value).to eq 'president.trump@originate.com'
     click_button 'Update User'
     expect(page).to have_content("User was successfully updated.")
     click_link 'Back'
-    expect(page).to have_text("Jaden")
-    expect(page).to_not have_text("Will")
+    expect(page).to have_text("President")
+    expect(page).to_not have_text("Donald")
   end
 
   it "deletes a basic user" do
     visit root_path
     page.accept_alert do
-      first(:link, 'Destroy').click
+      within('tr[data-uuid="tobe.deleted@originate.com"]') do
+        click_on('Destroy')
+      end
     end
-    expect(page).to_not have_content("Will")
+    expect(page).to_not have_content("Tobe")
   end
 
   it "errors when try to add a user with no first name", js:true do

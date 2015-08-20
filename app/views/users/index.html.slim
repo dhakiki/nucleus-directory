@@ -12,7 +12,7 @@ table
 
   tbody
     - @users.each do |user|
-      tr
+      tr data-uuid = user.email
         td = user.first_name
         td = user.last_name
         td = user.email

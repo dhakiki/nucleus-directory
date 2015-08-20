@@ -72,6 +72,12 @@ RSpec.configure do |config|
   config.include Capybara::DSL
   config.before(:suite) do
     DatabaseCleaner.clean
-  #  Rails.application.load_seed
+    #todo: figure out why create didn't work on feature tests and must be called here
+    FactoryGirl.create :user
+    FactoryGirl.create(:user, first_name: 'Keanu', last_name: 'Reeves', email: 'keanu.reeves@originate.com')
+    FactoryGirl.create(:user, first_name: 'Tobe', last_name: 'Deleted', email: 'tobe.deleted@originate.com')
+    FactoryGirl.create(:user, first_name: 'Donald', last_name: 'Trump', email: 'donald.trump@originate.com')
+    FactoryGirl.create :skill
+    FactoryGirl.create(:skill, name: 'Acting', level: 1, user_id: 2)
   end
 end
