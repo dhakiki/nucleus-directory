@@ -112,6 +112,17 @@ describe 'Users API', type: :request do
           email: 'jaden.smith@originate.com'
         }
       }
+      let(:google_attributes) {
+        {
+          google_account_attributes: {
+            google_id: 'abcitseasyas123',
+            token: 'assimpleasdoremi',
+            name: 'Will Smith',
+            email: 'will.smith@originate.com',
+            picture: 'http://cdn.celebritycarsblog.com/wp-content/uploads/Will-Smith.jpg'
+          }
+        }
+      }
       it 'updates a user successfully' do
         user = FactoryGirl.create :user
         put "/api/users/#{user.id}", {id: user.id, user: new_attributes} 
@@ -119,6 +130,11 @@ describe 'Users API', type: :request do
         new_user = response_object['user']
         expect(new_user['first_name']).to eq('Jaden')
         expect(new_user['email']).to eq('jaden.smith@originate.com')
+      end
+
+      it 'updates a users google profile successfully' do
+        user = FactoryGirl.create :user
+        expect { put "/api/users/#{user.id}", {id: user.id, user: google_attributes} }.to change{ GoogleAccount.count }.by(1)
       end
     end
   end

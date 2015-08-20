@@ -5,4 +5,6 @@ class User < ActiveRecord::Base
   validates_uniqueness_of :email
   has_many :skills
   accepts_nested_attributes_for :skills, allow_destroy: true, reject_if: lambda { |a| a[:name].blank? }
+  has_one :google_account
+  accepts_nested_attributes_for :google_account
 end
