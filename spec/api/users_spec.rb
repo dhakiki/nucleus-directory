@@ -11,6 +11,13 @@ describe 'Users API', type: :request do
       email: 'keanu.reeves@originate.com'
     }
   }
+  let(:existing_user_attributes) {
+    {
+      first_name: 'Clone',
+      last_name: 'Person',
+      email: 'clone.person@originate.com'
+    }
+  }
 
   let(:valid_user_with_skills_attributes) {
     {
@@ -84,9 +91,16 @@ describe 'Users API', type: :request do
     end
 
     it "assigns a newly created user as @user" do
-      post '/api/users', {:user => valid_user_attributes}
+      post '/api/users', {user: valid_user_attributes}
       expect(assigns(:user)).to be_a(User)
       expect(assigns(:user)).to be_persisted
+    end
+
+    it 'errors when creating a user with a duplicate email' do
+      user = FactoryGirl.create(:user, first_name: 'Clone', last_name: 'Person', email: 'clone.person@originate.com')
+      expect { post '/api/users', {user: existing_user_attributes} }.to change{ User.count }.by(0)
+      response_object = JSON.parse response.body
+      expect(response_object['error']).to_not be_nil
     end
   end
 
