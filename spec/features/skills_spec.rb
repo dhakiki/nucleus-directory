@@ -12,6 +12,8 @@ describe "Skills", js:true, type: :request do
     find_field('Level').find('option[value="3"]').click
     click_button "Create User"
     expect(page).to have_content("User was successfully created.")
+    visit root_path
+    expect(page).to have_content('Dancing(3)')
   end
 
   it 'edits a skill on an existing user' do
@@ -26,6 +28,8 @@ describe "Skills", js:true, type: :request do
     click_button "Update User"
     expect(page).to have_content("User was successfully updated.")
     expect(page).to have_content("Name:ActingLevel:5")
+    visit root_path
+    expect(page).to have_content('Acting(5)')
   end
 
   it 'removes a skill on an existing user' do

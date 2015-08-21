@@ -5,9 +5,29 @@
     = f.input :first_name
     = f.input :last_name
     = f.input :email
+    = f.input :title
+    = f.input :position, collection: @user_positions, selected: f.object.position
+    = f.input :bio, as: :text, input_html: {rows: 5, cols: 80}
+    = f.input :location
+
     = f.simple_fields_for :skills do |fs|
       = render 'skill_form', fs: fs
     = f.link_to_add 'Add a skill', :skills
+
+    = f.input :disabled
+    = f.input :twitter_profile
+    = f.input :github_profile
+    = f.input :additional_link
+    = f.input :supervisor, input_html: {class: 'typeahead supervisor'}
+    
+    = f.input :industry_experiences
+    = f.input :industry_interests
+    = f.input :technology_interests
+    
+    = f.input :start_date, as: :date
+
+    - if @user.supervisor
+
 
   .form-actions
     = f.button :submit

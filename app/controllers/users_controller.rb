@@ -1,6 +1,8 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :destroy]
   before_action :set_skill_levels, except: [:index]
+  before_action :set_user_positions, except: [:index]
+  before_action :set_all_users, except: [:index]
 
   # GET /users
   # GET /users.json
@@ -71,9 +73,18 @@ class UsersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
-      params.require(:user).permit(:first_name, :last_name, :email, skills_attributes: [:id, :name, :level, :_destroy], google_account_attributes: [:google_id, :token, :name, :email, :picture])
+      params.require(:user).permit(:first_name, :last_name, :email, :bio, :title, :position, :twitter_profile, :github_profile, :additional_link, :location, :industry_experiences, :industry_interests, :technology_interests, :notes, :start_date, :disabled, skills_attributes: [:id, :name, :level, :_destroy], google_account_attributes: [:google_id, :token, :name, :email, :picture])
     end
+
+    def set_all_users
+      @all_users = User.all
+    end
+
     def set_skill_levels
       @skill_levels = Skill::SKILL_LEVELS
+    end
+
+    def set_user_positions
+      @user_positions = User::LEVELS
     end
 end

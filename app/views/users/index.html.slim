@@ -5,7 +5,10 @@ table
     tr
       th First name
       th Last name
-      th Email
+      th Title
+      th Office
+      th Skills
+      th Notes
       th
       th
       th
@@ -15,7 +18,15 @@ table
       tr data-uuid = user.email
         td = user.first_name
         td = user.last_name
-        td = user.email
+        td = user.title
+        td = user.location
+        - skills = []
+        td
+          - for skill in user.skills
+            - skills.push "#{skill.name}(#{skill.level})"
+          = skills.join ','
+        td = user.notes
+
         td = link_to 'Show', user
         td = link_to 'Edit', edit_user_path(user)
         td = link_to 'Destroy', user, data: {:confirm => 'Are you sure?'}, :method => :delete

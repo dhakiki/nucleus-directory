@@ -10,6 +10,36 @@ p
   strong Email:
   = @user.email
 p
+  strong Title:
+  = @user.title
+p
+  strong Position:
+  = @user.position
+p
+  strong Location:
+  = @user.location
+p
+  strong Bio:
+  = @user.bio
+
+= if @user.supervisor
+  p
+    strong Reporting to:
+    = link_to @user.supervisor.first_name+@user.last_name, users_path(@user.supervisor)
+p
+  strong Twitter Profile:
+  = @user.twitter_profile
+p
+  strong Github Profile:
+  = @user.github_profile
+p
+  strong Additional Link:
+  = @user.additional_link
+p
+  strong Notes:
+  = @user.notes
+
+p
   b Skills:
   ul
     - for skill in @user.skills
