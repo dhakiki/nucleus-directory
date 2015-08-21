@@ -22,10 +22,10 @@ p
   strong Bio:
   = @user.bio
 
-= if @user.supervisor
+- if @user.supervisor
   p
     strong Reporting to:
-    = link_to @user.supervisor.first_name+@user.last_name, users_path(@user.supervisor)
+    = link_to "#{@user.supervisor.first_name} #{@user.supervisor.last_name}", users_path+"/#{@user.supervisor.id.to_s}"
 p
   strong Twitter Profile:
   = @user.twitter_profile

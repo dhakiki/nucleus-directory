@@ -4,6 +4,7 @@
   .form-inputs
     = f.input :first_name
     = f.input :last_name
+    = f.hidden_field :full_name
     = f.input :email
     = f.input :title
     = f.input :position, collection: @user_positions, selected: f.object.position
@@ -18,15 +19,13 @@
     = f.input :twitter_profile
     = f.input :github_profile
     = f.input :additional_link
-    = f.input :supervisor, input_html: {class: 'typeahead supervisor'}
+    = f.input :supervisor_name, as: :search, input_html: {class: 'supervisor-selector', 'data-autocomplete': @users}
     
     = f.input :industry_experiences
     = f.input :industry_interests
     = f.input :technology_interests
     
     = f.input :start_date, as: :date
-
-    - if @user.supervisor
 
 
   .form-actions

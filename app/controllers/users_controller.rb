@@ -19,15 +19,19 @@ class UsersController < ApplicationController
   # GET /users/new
   def new
     @user = User.new
+    @users = User.all.pluck(:full_name).to_json
   end
 
   # GET /users/1/edit
   def edit
+    @users = User.all.pluck(:full_name).to_json
   end
 
   # POST /users
   # POST /users.json
   def create
+    supervisor = User.find_by full_name: params[:user][:supervisor_name]
+    params[:user][:supervisor_id] = supervisor.id if supervisor
     @user = User.new(user_params)
 
     respond_to do |format|
@@ -44,6 +48,8 @@ class UsersController < ApplicationController
   # PATCH/PUT /users/1
   # PATCH/PUT /users/1.json
   def update
+    supervisor = User.find_by full_name: params[:user][:supervisor_name]
+    params[:user][:supervisor_id] = supervisor.id if supervisor
     respond_to do |format|
       if @user.update(user_params)
         format.html { redirect_to @user, notice: 'User was successfully updated.' }
@@ -73,7 +79,7 @@ class UsersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
-      params.require(:user).permit(:first_name, :last_name, :email, :bio, :title, :position, :twitter_profile, :github_profile, :additional_link, :location, :industry_experiences, :industry_interests, :technology_interests, :notes, :start_date, :disabled, skills_attributes: [:id, :name, :level, :_destroy], google_account_attributes: [:google_id, :token, :name, :email, :picture])
+      params.require(:user).permit(:first_name, :last_name, :full_name, :email, :bio, :title, :position, :supervisor_name, :supervisor_id, :twitter_profile, :github_profile, :additional_link, :location, :industry_experiences, :industry_interests, :technology_interests, :notes, :start_date, :disabled, skills_attributes: [:id, :name, :level, :_destroy], google_account_attributes: [:google_id, :token, :name, :email, :picture])
     end
 
     def set_all_users
