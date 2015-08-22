@@ -110,7 +110,24 @@ describe "AddUsers", type: :request, js:true do
         click_on('Show')
       end
       expect(page).to have_content("Reporting to:Bobby Meadows")
+    end
 
+    it 'removes supervisor from a subordinate when destroy superior' do
+      visit root_path
+      within('tr[data-uuid="ben.echols@originate.com"]') do
+        click_on('Show')
+      end
+      expect(page).to have_content("Reporting to:Dan Storms")
+      click_link 'Back'
+      page.accept_alert do
+        within('tr[data-uuid="dan.storms@originate.com"]') do
+          click_on('Destroy')
+        end
+      end
+      within('tr[data-uuid="ben.echols@originate.com"]') do
+        click_on('Show')
+      end
+      expect(page).to_not have_content("Reporting to:Dan Storms")
     end
   end
 end

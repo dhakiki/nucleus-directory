@@ -82,8 +82,10 @@ RSpec.configure do |config|
     FactoryGirl.create(:user, first_name: 'BobTheBuilder', last_name: 'Meadows', full_name: 'BobTheBuilder Meadows', email: 'bobthebuilder.meadows@originate.com')
     FactoryGirl.create(:user, first_name: 'Kevin', last_name: 'Goslar', full_name: 'Kevin Goslar', email: 'kevin.goslar@originate.com')
     FactoryGirl.create(:user, first_name: 'Robert', last_name: 'Meadows', full_name: 'Robert Meadows', email: 'robert.meadows@originate.com')
+    FactoryGirl.create(:user, first_name: 'Dan', last_name: 'Storms', full_name: 'Dan Storms', email: 'dan.storms@originate.com')
     FactoryGirl.create(:user, first_name: 'Dora', last_name: 'Explorer', full_name: 'Dora Explorer', email: 'dora.explorer@originate.com', supervisor_id: 8, supervisor_name: 'Kevin Goslar')
     FactoryGirl.create(:user, first_name: 'Boots', last_name: 'Explorer', full_name: 'Boots Explorer', email: 'boots.explorer@originate.com', supervisor_id: 9, supervisor_name: 'Robert Meadows')
+    FactoryGirl.create(:user, first_name: 'Ben', last_name: 'Echols', full_name: 'Ben Echols', email: 'ben.echols@originate.com', supervisor_id: 10, supervisor_name: 'Dan Storms')
     FactoryGirl.create :skill
     FactoryGirl.create(:skill, name: 'Acting', level: 1, user_id: 2)
   end
