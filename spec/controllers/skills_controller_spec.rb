@@ -27,7 +27,6 @@ describe SkillsController, type: :controller do
 
   after do
     DatabaseCleaner.clean
-    Rails.application.load_seed
   end
 
 

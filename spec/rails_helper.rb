@@ -74,9 +74,16 @@ RSpec.configure do |config|
     DatabaseCleaner.clean
     #todo: figure out why create didn't work on feature tests and must be called here
     FactoryGirl.create :user
-    FactoryGirl.create(:user, first_name: 'Keanu', last_name: 'Reeves', email: 'keanu.reeves@originate.com')
-    FactoryGirl.create(:user, first_name: 'Tobe', last_name: 'Deleted', email: 'tobe.deleted@originate.com')
-    FactoryGirl.create(:user, first_name: 'Donald', last_name: 'Trump', email: 'donald.trump@originate.com')
+    FactoryGirl.create(:user, first_name: 'Keanu', last_name: 'Reeves', full_name: 'Keanu Reeves', email: 'keanu.reeves@originate.com')
+    FactoryGirl.create(:user, first_name: 'Tobe', last_name: 'Deleted', full_name: 'Tobo Deleted', email: 'tobe.deleted@originate.com')
+    FactoryGirl.create(:user, first_name: 'Donald', last_name: 'Trump', full_name: 'Donald Trump', email: 'donald.trump@originate.com')
+    FactoryGirl.create(:user, first_name: 'Rob', last_name: 'Meadows', full_name: 'Rob Meadows', email: 'rob.meadows@originate.com')
+    FactoryGirl.create(:user, first_name: 'Bob', last_name: 'Meadows', full_name: 'Bob Meadows', email: 'bob.meadows@originate.com')
+    FactoryGirl.create(:user, first_name: 'BobTheBuilder', last_name: 'Meadows', full_name: 'BobTheBuilder Meadows', email: 'bobthebuilder.meadows@originate.com')
+    FactoryGirl.create(:user, first_name: 'Kevin', last_name: 'Goslar', full_name: 'Kevin Goslar', email: 'kevin.goslar@originate.com')
+    FactoryGirl.create(:user, first_name: 'Robert', last_name: 'Meadows', full_name: 'Robert Meadows', email: 'robert.meadows@originate.com')
+    FactoryGirl.create(:user, first_name: 'Dora', last_name: 'Explorer', full_name: 'Dora Explorer', email: 'dora.explorer@originate.com', supervisor_id: 8, supervisor_name: 'Kevin Goslar')
+    FactoryGirl.create(:user, first_name: 'Boots', last_name: 'Explorer', full_name: 'Boots Explorer', email: 'boots.explorer@originate.com', supervisor_id: 9, supervisor_name: 'Robert Meadows')
     FactoryGirl.create :skill
     FactoryGirl.create(:skill, name: 'Acting', level: 1, user_id: 2)
   end

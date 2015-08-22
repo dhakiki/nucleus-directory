@@ -63,4 +63,54 @@ describe "AddUsers", type: :request, js:true do
     page.execute_script("$('#user_last_name').trigger('change')")
     expect(find_field('Email').value).to eq ''
   end
+
+  context 'supervisor functionality', js:true do
+    it 'creates a new subordinate of rob meadows' do
+      expect(User.find_by(email: 'rob.meadows@originate.com').subordinates.length).to be 0
+      visit root_path
+      click_link "New User"
+      fill_in "First name", with: 'Regina'
+      fill_in "Last name", with: 'Phalangie'
+      page.execute_script("$('#user_last_name').trigger('change')")
+      fill_in "Supervisor name", with: 'Rob Meadows'
+      click_button "Create User"
+      expect(page).to have_content("User was successfully created.")
+      expect(page).to have_content("Reporting to:Rob Meadows")
+      click_link "Rob Meadows"
+      expect(page).to have_content("rob.meadows@originate.com")
+      expect(User.find_by(email: 'rob.meadows@originate.com').subordinates.length).to be 1
+    end
+
+    it 'updates a users supervisor to bob meadows', js:true do
+      expect(User.find_by(email: 'bobthebuilder.meadows@originate.com').subordinates.length).to be 0
+      expect(User.find_by(email: 'kevin.goslar@originate.com').subordinates.length).to be 1
+      visit root_path
+      expect(page).to have_text("Dora")
+      within('tr[data-uuid="dora.explorer@originate.com"]') do
+        click_on('Edit')
+      end
+      fill_in "Supervisor name", with: 'BobTheBuilder Meadows'
+      click_button 'Update User'
+      expect(page).to have_content("User was successfully updated.")
+      expect(User.find_by(email: 'bobthebuilder.meadows@originate.com').subordinates.length).to be 1
+      expect(User.find_by(email: 'kevin.goslar@originate.com').subordinates.length).to be 0
+    end
+
+    it 'updates subordinate\'s supervisor\'s name when change supervisor\'s name', js:true do
+      visit root_path
+      within('tr[data-uuid="robert.meadows@originate.com"]') do
+        click_on('Edit')
+      end
+      fill_in "First name", with: 'Bobby'
+      page.execute_script("$('#user_first_name').trigger('change')")
+      click_button 'Update User'
+      expect(page).to have_content("User was successfully updated.")
+      click_link 'Back'
+      within('tr[data-uuid="boots.explorer@originate.com"]') do
+        click_on('Show')
+      end
+      expect(page).to have_content("Reporting to:Bobby Meadows")
+
+    end
+  end
 end

@@ -3,6 +3,7 @@ FactoryGirl.define do
   factory :user do
     first_name 'Will'
     last_name 'Smith'
+    full_name 'Will Smith'
     email 'will.smith@originate.com'
   end
 

@@ -48,6 +48,14 @@ class UsersController < ApplicationController
   # PATCH/PUT /users/1
   # PATCH/PUT /users/1.json
   def update
+    # todo: improvements here? need the text field for the edit but don't know if i can do away with it
+    # update subordinate's supervisor_name fields
+    if params[:user][:full_name] != @user.full_name
+      @user.subordinates.each do |subordinate|
+        subordinate.supervisor_name = params[:user][:full_name]
+        subordinate.save!
+      end
+    end
     supervisor = User.find_by full_name: params[:user][:supervisor_name]
     params[:user][:supervisor_id] = supervisor.id if supervisor
     respond_to do |format|

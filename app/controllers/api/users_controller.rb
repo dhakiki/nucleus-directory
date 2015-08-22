@@ -52,7 +52,7 @@ module Api
     end
 
     def user_params
-      params.require(:user).permit(:first_name, :last_name, :email, skills_attributes: [:id, :name, :level, :_destroy], google_account_attributes: [:google_id, :token, :name, :email, :picture])
+      params.require(:user).permit(:first_name, :last_name, :full_name, :email, :bio, :title, :position, :supervisor_name, :supervisor_id, :twitter_profile, :github_profile, :additional_link, :location, :industry_experiences, :industry_interests, :technology_interests, :notes, :start_date, :disabled, skills_attributes: [:id, :name, :level, :_destroy], google_account_attributes: [:google_id, :token, :name, :email, :picture])
     end
   end
 end
