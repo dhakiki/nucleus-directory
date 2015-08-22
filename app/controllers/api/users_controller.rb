@@ -33,6 +33,9 @@ module Api
     end
 
     def update
+      supervisor = User.find_by full_name: params[:user][:supervisor_name]
+      params[:user][:supervisor_id] = supervisor.id if supervisor
+      @user = User.find(params[:id])
       # todo: improvements here? need the text field for the edit but don't know if i can do away with it
       # update subordinate's supervisor_name fields
       if params[:user][:full_name] != @user.full_name
@@ -41,9 +44,6 @@ module Api
           subordinate.save!
         end
       end
-      supervisor = User.find_by full_name: params[:user][:supervisor_name]
-      params[:user][:supervisor_id] = supervisor.id if supervisor
-      @user = User.find(params[:id])
       if @user.update(user_params)
         render json: {user: @user, status: :ok}
       else
@@ -53,6 +53,11 @@ module Api
 
     def destroy
       @user = User.find(params[:id])
+      @user.subordinates.each do |subordinate|
+        subordinate.supervisor_name = ""
+        subordinate.supervisor_id = nil
+        subordinate.save!
+      end
       @user.destroy
       render json: { status: :ok }
     end

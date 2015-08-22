@@ -8,6 +8,7 @@ describe 'Users API', type: :request do
     {
       first_name: 'Keanu',
       last_name: 'Reeves',
+      full_name: 'Keanu Reeves',
       email: 'keanu.reeves@originate.com'
     }
   }
@@ -15,6 +16,7 @@ describe 'Users API', type: :request do
     {
       first_name: 'Clone',
       last_name: 'Person',
+      full_name: 'Clone Person',
       email: 'clone.person@originate.com'
     }
   }
@@ -23,6 +25,7 @@ describe 'Users API', type: :request do
     {
       first_name: 'Keanu',
       last_name: 'Reeves',
+      full_name: 'Keanu Reeves',
       email: 'keanu.reeves@originate.com',
       skills_attributes: [
         {
@@ -102,6 +105,22 @@ describe 'Users API', type: :request do
       response_object = JSON.parse response.body
       expect(response_object['error']).to_not be_nil
     end
+    context 'supervisor/subordinate creation' do
+      let(:valid_subordinate_params) {
+        {
+          first_name: 'Dave',
+          last_name: 'Minion',
+          full_name: 'Dave Minion',
+          email: 'dave.minion@originate.com',
+          supervisor_name: 'Boss Person'
+        }
+      
+      }
+      it 'creates a subordinate properly' do
+        user = FactoryGirl.create(:user, first_name: 'Boss', last_name: 'Person', full_name: 'Boss Person', email: 'boss.person@originate.com')
+        expect { post '/api/users', {user: valid_subordinate_params} }.to change{ User.find_by(email: 'boss.person@originate.com').subordinates.length }.by(1)
+      end
+    end
   end
 
   describe 'PUT /user' do
@@ -123,6 +142,7 @@ describe 'Users API', type: :request do
           }
         }
       }
+
       it 'updates a user successfully' do
         user = FactoryGirl.create :user
         put "/api/users/#{user.id}", {id: user.id, user: new_attributes} 
@@ -136,23 +156,56 @@ describe 'Users API', type: :request do
         user = FactoryGirl.create :user
         expect { put "/api/users/#{user.id}", {id: user.id, user: google_attributes} }.to change{ GoogleAccount.count }.by(1)
       end
-    end
-  end
-  context 'with invalid params' do
 
-    let(:invalid_attribues) {
-      {
-        iwanna: 'rockrightnow',
-        imrobbase: 'andicametogetdown'
+      context 'supervisor/subordinate updates' do
+        let(:subordinate_with_new_boss_attributes) {
+          {
+            supervisor_name: 'OtherBoss Person'
+          }
+        }
+        let(:new_supervisor_attributes) {
+          {
+            first_name: 'Gru',
+            email: 'gru.person@originate.com',
+            full_name: 'Gru Person'
+          }
+        }
+        
+        let!(:old_boss) { FactoryGirl.create(:user, first_name: 'Boss', last_name: 'Person', full_name: 'Boss Person', email: 'boss.person@originate.com') }
+        let!(:new_boss) { FactoryGirl.create(:user, first_name: 'OtherBoss', last_name: 'Person', full_name: 'OtherBoss Person', email: 'otherboss.person@originate.com') }
+        let!(:user) { FactoryGirl.create(:user, first_name: 'Dave', last_name: 'Minion', full_name: 'Dave Minion', email: 'dave.minion@originate.com', supervisor_name: 'Boss Person', supervisor_id: 1) }
+
+        it 'assigns to new supervisor subordinates list' do
+          expect { put "/api/users/#{user.id}", {id: user.id, user: subordinate_with_new_boss_attributes} }.to change{ User.find_by(email: 'otherboss.person@originate.com').subordinates.length }.by(1)
+        end
+
+        it 'removes from old supervisor subordinates list' do
+          expect { put "/api/users/#{user.id}", {id: user.id, user: subordinate_with_new_boss_attributes} }.to change{ User.find_by(email: 'boss.person@originate.com').subordinates.length }.by(-1)
+        end
+
+        it 'updates subordinates supervisor names properly' do
+          put "/api/users/#{old_boss.id}", {id: user.id, user: new_supervisor_attributes}
+          expect(User.find(user.id).supervisor_name).to eq("Gru Person")
+        end
+      end
+    end
+
+    context 'with invalid params' do
+
+      let(:invalid_attribues) {
+        {
+          iwanna: 'rockrightnow',
+          imrobbase: 'andicametogetdown'
+        }
       }
-    }
-    it 'does not update with failed attribues' do
-      user = FactoryGirl.create :user
-      put "/api/users/#{user.id}", {id: user.id, user: invalid_attributes} 
-      response_object = JSON.parse response.body
-      same_user = response_object['user']
-      expect(same_user['first_name']).to eq('Will')
-      expect(same_user['email']).to eq('will.smith@originate.com')
+      it 'does not update with failed attribues' do
+        user = FactoryGirl.create :user
+        put "/api/users/#{user.id}", {id: user.id, user: invalid_attributes} 
+        response_object = JSON.parse response.body
+        same_user = response_object['user']
+        expect(same_user['first_name']).to eq('Will')
+        expect(same_user['email']).to eq('will.smith@originate.com')
+      end
     end
   end
 
@@ -162,6 +215,22 @@ describe 'Users API', type: :request do
       expect {
         delete "/api/users/#{user.id}"
       }.to change(User, :count).by(-1)
+    end
+
+    context 'supervisor/superior deletion' do
+      let!(:boss) { FactoryGirl.create(:user, first_name: 'Boss', last_name: 'Person', full_name: 'Boss Person', email: 'boss.person@originate.com') }
+      let!(:user) { FactoryGirl.create(:user, first_name: 'Dave', last_name: 'Minion', full_name: 'Dave Minion', email: 'dave.minion@originate.com', supervisor_name: 'Boss Person', supervisor_id: 1) }
+      
+      it 'updates user when supervisor gets deleted' do
+        delete "/api/users/#{boss.id}"
+        expect(User.find(user.id).supervisor).to be nil
+        expect(User.find(user.id).supervisor_name).to eq ""
+      end
+
+      it 'updates supervisor\'s subordinates list when subordinate gets deleted' do
+        expect{ delete "/api/users/#{user.id}" }.to change { User.find(boss.id).subordinates.length }.by(-1)
+      end
+
     end
   end
 end

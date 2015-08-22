@@ -74,6 +74,7 @@ class UsersController < ApplicationController
   def destroy
     @user.subordinates.each do |subordinate|
       subordinate.supervisor_name = ""
+      subordinate.supervisor_id = nil
       subordinate.save!
     end
     @user.destroy
