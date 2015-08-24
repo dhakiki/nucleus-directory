@@ -13,3 +13,8 @@
  *= require_tree .
  *= require_self
  */
+@font-face {
+  font-family: 'CircularPro-Book';
+  src: url('CircularPro-Book.otf') format('opentype');
+}
+
