@@ -7,8 +7,11 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
-
-<%= yield %>
-
+<div class='header'>
+  <%= image_tag('/assets/images/originate_logo_small.png') %>
+</div>
+<div class='content'>
+  <%= yield %>
+</div>
 </body>
 </html>

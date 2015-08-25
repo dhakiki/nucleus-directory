@@ -1,0 +1,54 @@
+p#notice = notice
+
+p
+  strong First name:
+  = @user.first_name
+p
+  strong Last name:
+  = @user.last_name
+p
+  strong Email:
+  = @user.email
+p
+  strong Title:
+  = @user.title
+p
+  strong Position:
+  = @user.position
+p
+  strong Location:
+  = @user.location
+p
+  strong Bio:
+  = @user.bio
+
+- if @user.supervisor
+  p
+    strong Reporting to:
+    = link_to "#{@user.supervisor.first_name} #{@user.supervisor.last_name}", users_path+"/#{@user.supervisor.id.to_s}"
+p
+  strong Twitter Profile:
+  = @user.twitter_profile
+p
+  strong Github Profile:
+  = @user.github_profile
+p
+  strong Additional Link:
+  = @user.additional_link
+p
+  strong Notes:
+  = @user.notes
+
+p
+  b Skills:
+  ul
+    - for skill in @user.skills
+      li
+        b Name:
+        = skill.name
+        b Level:
+        = skill.level
+
+= link_to 'Edit', edit_user_path(@user)
+'|
+= link_to 'Back', users_path

@@ -1,0 +1,35 @@
+div
+  span.right-aligned
+    = link_to 'New User', new_user_path
+
+table
+  thead
+    tr
+      th Name
+      th Title
+      th Office
+      th Skills
+      th Notes
+      th
+      th
+      th
+
+  tbody
+    - @users.each do |user|
+      tr data-uuid = user.email
+        td = user.full_name
+        td = user.title
+        td = user.location
+        - skills = []
+        td
+          - for skill in user.skills
+            - skills.push "#{skill.name}(#{skill.level})"
+          = skills.join ','
+        td = user.notes
+
+        td = link_to 'Show', user
+        td = link_to 'Edit', edit_user_path(user)
+        td = link_to 'Destroy', user, data: {:confirm => 'Are you sure?'}, :method => :delete
+
+br
+
