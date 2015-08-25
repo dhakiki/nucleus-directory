@@ -32,5 +32,36 @@
     = f.button :submit
 
 coffee:
-  UserForm = require 'user'
-  new UserForm(el: '.form-inputs')
+  $ ->
+    supervisors = new Bloodhound
+      datumTokenizer: Bloodhound.tokenizers.whitespace,
+      queryTokenizer: Bloodhound.tokenizers.whitespace,
+      local: $('.supervisor-selector').data('autocomplete')
+
+    $('.supervisor-selector').typeahead({
+      hint: true,
+      highlight: true,
+      minLength: 1
+    },
+    {
+      name: 'supervisors',
+      source: supervisors
+    })
+
+  $('input[name="user[first_name]"]').on 'change', ->
+    if $('#user_first_name').prop('value') != "" && $('#user_last_name').prop('value') != "" 
+      first_name = $('#user_first_name').prop('value')
+      last_name = $('#user_last_name').prop('value')
+      email = "#{first_name}.#{last_name}@originate.com".replace(/ /g, '').toLowerCase()
+      $('#user_email').prop 'value', email
+      full_name = "#{first_name} #{last_name}"
+      $('#user_full_name').prop 'value', full_name
+
+  $('input[name="user[last_name]"]').on 'change', ->
+    if $('#user_first_name').prop('value') != "" && $('#user_last_name').prop('value') != "" 
+      first_name = $('#user_first_name').prop('value')
+      last_name = $('#user_last_name').prop('value')
+      email = "#{first_name}.#{last_name}@originate.com".replace(/ /g, '').toLowerCase()
+      $('#user_email').prop 'value', email
+      full_name = "#{first_name} #{last_name}"
+      $('#user_full_name').prop 'value', full_name

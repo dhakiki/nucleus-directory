@@ -15,7 +15,5 @@
 //= require jquery_nested_form
 //= require turbolinks
 //= require lodash
-//= require backbone
 //= require typeahead.bundle.min
 //= require_tree .
-//= require ./user.module
