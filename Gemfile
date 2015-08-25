@@ -56,6 +56,7 @@ group :development, :test do
 end
 
 group :test do
+  gem 'cucumber-rails'
   gem 'capybara'
   gem 'launchy'
   gem 'database_cleaner'
